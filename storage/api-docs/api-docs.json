@@ -1,0 +1,1804 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Directorio de empresas - CCGAMT",
+        "description": "Backend y API Acceso a datos.",
+        "contact": {
+            "email": "brayan-diaz3@upc.edu.co"
+        },
+        "license": {
+            "name": "@Universidad Piloto de Colombia SAM - Todos los Derechos Reservados"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/comentarios": {
+            "get": {
+                "tags": [
+                    "Comentarios"
+                ],
+                "summary": "Listar todos los comentarios",
+                "operationId": "8478472babe96435537abd02f58aee0d",
+                "responses": {
+                    "200": {
+                        "description": "Lista de comentarios"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Comentarios"
+                ],
+                "summary": "Crear un nuevo comentario",
+                "operationId": "5da383245219a9b40dbe89d787ea634c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_usuario",
+                                    "foro_id",
+                                    "contenido",
+                                    "fecha_publicacion"
+                                ],
+                                "properties": {
+                                    "id_usuario": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "foro_id": {
+                                        "type": "integer",
+                                        "example": 5
+                                    },
+                                    "contenido": {
+                                        "type": "string",
+                                        "example": "Este es un comentario de ejemplo."
+                                    },
+                                    "fecha_publicacion": {
+                                        "type": "string",
+                                        "format": "date",
+                                        "example": "2025-04-05"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Comentario creado correctamente"
+                    },
+                    "400": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/comentarios/{id}": {
+            "get": {
+                "tags": [
+                    "Comentarios"
+                ],
+                "summary": "Obtener un comentario por ID",
+                "operationId": "69ee0321df0feb425bd2be40835c5f2b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comentario encontrado"
+                    },
+                    "404": {
+                        "description": "Comentario no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Comentarios"
+                ],
+                "summary": "Actualizar un comentario",
+                "operationId": "fc3e9975be76ff9587fd4c04d0ecc1df",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "contenido",
+                                    "fecha_publicacion"
+                                ],
+                                "properties": {
+                                    "contenido": {
+                                        "type": "string",
+                                        "example": "Este es un comentario actualizado."
+                                    },
+                                    "fecha_publicacion": {
+                                        "type": "string",
+                                        "example": "2025-04-30"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Comentario actualizado correctamente"
+                    },
+                    "400": {
+                        "description": "Errores de validación"
+                    },
+                    "404": {
+                        "description": "Comentario no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Comentarios"
+                ],
+                "summary": "Eliminar un comentario",
+                "operationId": "1e0b0839c86abd2906a32a05638a79d0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comentario eliminado correctamente"
+                    },
+                    "404": {
+                        "description": "Comentario no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/ejercicios": {
+            "get": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Listar todos los ejercicios",
+                "operationId": "a4485ab2cada472a3ae91ac100e03302",
+                "responses": {
+                    "200": {
+                        "description": "Lista de ejercicios"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Crear un nuevo ejercicio",
+                "operationId": "624d1a29ac578c6492c810249f64448b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "pregunta",
+                                    "respuesta_correcta",
+                                    "opciones",
+                                    "id_leccion"
+                                ],
+                                "properties": {
+                                    "pregunta": {
+                                        "type": "string",
+                                        "example": "¿Qué significa este gesto?"
+                                    },
+                                    "opciones": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "respuesta_correcta": {
+                                        "type": "string",
+                                        "example": "B"
+                                    },
+                                    "id_leccion": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_tipo_pregunta": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Ejercicio creado correctamente"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/ejercicios/{id}": {
+            "get": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Obtener un ejercicio por ID",
+                "operationId": "a47c40e65f82d5ca6b2581e4c654a9e5",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ejercicio encontrado"
+                    },
+                    "404": {
+                        "description": "Ejercicio no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Actualizar un ejercicio existente",
+                "operationId": "fd0a2a5a1d513a8f7d5df6078e3a88e7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "pregunta": {
+                                        "type": "string",
+                                        "example": "¿Qué se interpreta con este gesto?"
+                                    },
+                                    "opciones": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "respuesta_correcta": {
+                                        "type": "string",
+                                        "example": "Sí"
+                                    },
+                                    "id_leccion": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_tipo_pregunta": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Ejercicio actualizado correctamente"
+                    },
+                    "404": {
+                        "description": "Ejercicio no encontrado"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Ejercicios"
+                ],
+                "summary": "Eliminar un ejercicio",
+                "operationId": "9cab5e12fd325c8d33359c71dcc2f35e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Ejercicio eliminado correctamente"
+                    },
+                    "404": {
+                        "description": "Ejercicio no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/lecciones": {
+            "get": {
+                "tags": [
+                    "Lecciones"
+                ],
+                "summary": "Listar todas las lecciones",
+                "operationId": "3098182027fbb7166466d536ae38482c",
+                "responses": {
+                    "200": {
+                        "description": "Lista de lecciones"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Lecciones"
+                ],
+                "summary": "Crear una nueva lección",
+                "operationId": "54b94bbfc77ce9c3934f30f6929c2efc",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "titulo",
+                                    "id_nivel"
+                                ],
+                                "properties": {
+                                    "titulo": {
+                                        "type": "string",
+                                        "example": "Lección 1"
+                                    },
+                                    "contenido": {
+                                        "type": "string",
+                                        "example": "Contenido de la lección"
+                                    },
+                                    "id_nivel": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Lección creada"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/lecciones/{id}": {
+            "get": {
+                "tags": [
+                    "Lecciones"
+                ],
+                "summary": "Obtener una lección específica",
+                "operationId": "24fcd9fbd2ae1deffb52a5812e730d2f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la lección",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lección encontrada"
+                    },
+                    "404": {
+                        "description": "Lección no encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Lecciones"
+                ],
+                "summary": "Actualizar una lección existente",
+                "operationId": "35f3d816bb9443667e1af67e54dc43f8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la lección",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "titulo": {
+                                        "type": "string",
+                                        "example": "Lección actualizada"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Contenido actualizado"
+                                    },
+                                    "curso_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Lección actualizada"
+                    },
+                    "404": {
+                        "description": "Lección no encontrada"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Lecciones"
+                ],
+                "summary": "Eliminar una lección",
+                "operationId": "6d01d40d6e1c185978b4457d0309ca48",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la lección",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lección eliminada correctamente"
+                    },
+                    "404": {
+                        "description": "Lección no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/niveles": {
+            "get": {
+                "tags": [
+                    "Niveles"
+                ],
+                "summary": "Listar todos los niveles",
+                "operationId": "6e707cb14cb81a42caf114e02857411f",
+                "responses": {
+                    "200": {
+                        "description": "Lista de niveles"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Niveles"
+                ],
+                "summary": "Crear un nuevo nivel",
+                "operationId": "19a09347d504945147aedc3774c49003",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Nivel Básico"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Primer nivel de dificultad"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Nivel creado exitosamente"
+                    },
+                    "400": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/niveles/{id}": {
+            "get": {
+                "tags": [
+                    "Niveles"
+                ],
+                "summary": "Obtener un nivel específico",
+                "operationId": "b32dc128c14f03c334577ac9bc7b7f1f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del nivel",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Nivel encontrado"
+                    },
+                    "404": {
+                        "description": "Nivel no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Niveles"
+                ],
+                "summary": "Actualizar un nivel existente",
+                "operationId": "701bf5f1f82b1a6f32a0f3e41c6145a3",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del nivel",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Nivel Intermedio"
+                                    },
+                                    "descripcion": {
+                                        "type": "string",
+                                        "example": "Segundo nivel de dificultad"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nivel actualizado exitosamente"
+                    },
+                    "400": {
+                        "description": "Errores de validación"
+                    },
+                    "404": {
+                        "description": "Nivel no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Niveles"
+                ],
+                "summary": "Eliminar un nivel",
+                "operationId": "d798a7eb8592900e6657fdb3cc958bd8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del nivel",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Nivel eliminado"
+                    },
+                    "404": {
+                        "description": "Nivel no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/permisos": {
+            "get": {
+                "tags": [
+                    "Permisos"
+                ],
+                "summary": "Listar todos los permisos",
+                "operationId": "8feceb78c9ff332ad552bb98ae0657d3",
+                "responses": {
+                    "200": {
+                        "description": "Lista de permisos"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Permisos"
+                ],
+                "summary": "Crear un nuevo permiso",
+                "operationId": "f5312187af2d66fda3392fd3222089fb",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "editar_usuarios"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Permiso creado exitosamente"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/permisos/{id}": {
+            "get": {
+                "tags": [
+                    "Permisos"
+                ],
+                "summary": "Mostrar un permiso por ID",
+                "operationId": "36d51e43024849e1a739a7021da163ce",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del permiso",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Permiso encontrado"
+                    },
+                    "404": {
+                        "description": "Permiso no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Permisos"
+                ],
+                "summary": "Actualizar un permiso existente",
+                "operationId": "bc6245339799a3f8a9a81e93faa293b6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del permiso",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "ver_reportes"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Permiso actualizado exitosamente"
+                    },
+                    "404": {
+                        "description": "Permiso no encontrado"
+                    },
+                    "422": {
+                        "description": "Errores de validación"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Permisos"
+                ],
+                "summary": "Eliminar un permiso",
+                "operationId": "1b8b8d685cca25f33209f68652f78fb8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del permiso",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Permiso eliminado correctamente"
+                    },
+                    "404": {
+                        "description": "Permiso no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/progreso-usuarios": {
+            "get": {
+                "tags": [
+                    "ProgresoUsuario"
+                ],
+                "summary": "Listar todos los progresos de los usuarios",
+                "operationId": "5690ec040abb8ff7e0a2e54009f08999",
+                "responses": {
+                    "200": {
+                        "description": "Lista de progresos"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "ProgresoUsuario"
+                ],
+                "summary": "Registrar un nuevo progreso de usuario",
+                "operationId": "31e07a5bb4d53d646d10a6c21e7d3635",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_usuario",
+                                    "id_leccion_actual",
+                                    "ejercicios_completados"
+                                ],
+                                "properties": {
+                                    "id_usuario": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "id_leccion_actual": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "ejercicios_completados": {
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Progreso creado exitosamente"
+                    },
+                    "400": {
+                        "description": "Errores de validación"
+                    }
+                }
+            }
+        },
+        "/api/progreso-usuarios/{id}": {
+            "get": {
+                "tags": [
+                    "ProgresoUsuario"
+                ],
+                "summary": "Obtener un progreso específico por ID",
+                "operationId": "275658acc2b7fc7adc37bec732d70e76",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del progreso del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Progreso encontrado"
+                    },
+                    "404": {
+                        "description": "Progreso no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "ProgresoUsuario"
+                ],
+                "summary": "Actualizar un progreso de usuario",
+                "operationId": "68777f1d87832865d61a1308af671663",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del progreso del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "ejercicios_completados": {
+                                        "type": "integer",
+                                        "example": 20
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Progreso actualizado"
+                    },
+                    "400": {
+                        "description": "Errores de validación"
+                    },
+                    "404": {
+                        "description": "Progreso no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "ProgresoUsuario"
+                ],
+                "summary": "Eliminar un progreso de usuario",
+                "operationId": "c9d36b22a2bb6c586de8291363a2761a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID del progreso del usuario",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Progreso eliminado correctamente"
+                    },
+                    "404": {
+                        "description": "Progreso no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/rachas": {
+            "get": {
+                "tags": [
+                    "Rachas"
+                ],
+                "summary": "Listar todas las rachas",
+                "operationId": "f77cce699c05b9a114ee003b9d0cffa3",
+                "responses": {
+                    "200": {
+                        "description": "Lista de rachas"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Rachas"
+                ],
+                "summary": "Crear una nueva racha",
+                "operationId": "2d068205842f86720bd1d0e3469886e8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_usuario",
+                                    "dias_consecutivos"
+                                ],
+                                "properties": {
+                                    "id_usuario": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "dias_consecutivos": {
+                                        "type": "integer",
+                                        "example": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Racha creada"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    }
+                }
+            }
+        },
+        "/api/rachas/{id}": {
+            "get": {
+                "tags": [
+                    "Rachas"
+                ],
+                "summary": "Obtener una racha por ID",
+                "operationId": "8dc925ecca7151ea7e4bc662263064dc",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la racha",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Racha encontrada"
+                    },
+                    "404": {
+                        "description": "Racha no encontrada"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Rachas"
+                ],
+                "summary": "Actualizar una racha existente",
+                "operationId": "2ade8c680ef3bdcc27b46a897c297ca0",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la racha",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "dias_consecutivos"
+                                ],
+                                "properties": {
+                                    "dias_consecutivos": {
+                                        "type": "integer",
+                                        "example": 10
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Racha actualizada"
+                    },
+                    "400": {
+                        "description": "Datos inválidos"
+                    },
+                    "404": {
+                        "description": "Racha no encontrada"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Rachas"
+                ],
+                "summary": "Eliminar una racha",
+                "operationId": "af1b5ea784c8b11c102fb3ccbef6fc6b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la racha",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Racha eliminada correctamente"
+                    },
+                    "404": {
+                        "description": "Racha no encontrada"
+                    }
+                }
+            }
+        },
+        "/api/reportes": {
+            "get": {
+                "tags": [
+                    "Reportes"
+                ],
+                "summary": "Listar todos los reportes",
+                "operationId": "f942c2f53a8662a6f875d951eb2c85b9",
+                "responses": {
+                    "200": {
+                        "description": "Lista de reportes"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Reportes"
+                ],
+                "summary": "Crear un nuevo reporte",
+                "operationId": "e19cc71ac5aa411bd87112025d2d8af8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "id_usuario",
+                                    "descripcion"
+                                ],
+                                "properties": {
+                                    "id_usuario": {
+                                        "type": "integer"
+                                    },
+                                    "descripcion": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Reporte creado"
+                    },
+                    "400": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/reportes/{id}": {
+            "get": {
+                "tags": [
+                    "Reportes"
+                ],
+                "summary": "Obtener un reporte por ID",
+                "operationId": "25653ad638314a9e4580de79483d7633",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reporte encontrado"
+                    },
+                    "404": {
+                        "description": "Reporte no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Reportes"
+                ],
+                "summary": "Actualizar un reporte existente",
+                "operationId": "d3d32f5bfae9113e0fe7c5a3ba5485a1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "descripcion": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Reporte actualizado"
+                    },
+                    "400": {
+                        "description": "Error de validación"
+                    },
+                    "404": {
+                        "description": "Reporte no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Reportes"
+                ],
+                "summary": "Eliminar un reporte",
+                "operationId": "2db54d0fea33418092a1fb41056e9ec2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reporte eliminado"
+                    },
+                    "404": {
+                        "description": "Reporte no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/roles": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Listar todos los roles",
+                "operationId": "bf78d43aa8b5c576b78b08b73c404cb6",
+                "responses": {
+                    "200": {
+                        "description": "Lista de roles"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Crear un nuevo rol",
+                "operationId": "19029466a195a478441990551cb1e8c9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "maxLength": 50
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Rol creado"
+                    },
+                    "400": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/roles/{id}": {
+            "get": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Obtener un rol por ID",
+                "operationId": "bcca3423f39b15abd0d0214dd6169f3c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rol encontrado"
+                    },
+                    "404": {
+                        "description": "Rol no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Actualizar un rol existente",
+                "operationId": "0444e2e7859bbaa81749d090c06415a1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "nombre"
+                                ],
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "maxLength": 50
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Rol actualizado"
+                    },
+                    "400": {
+                        "description": "Error de validación"
+                    },
+                    "404": {
+                        "description": "Rol no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Roles"
+                ],
+                "summary": "Eliminar un rol",
+                "operationId": "de55f66883ee7b0d98d50e5e82e94f7e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Rol eliminado"
+                    },
+                    "404": {
+                        "description": "Rol no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/tipo_pregunta": {
+            "get": {
+                "tags": [
+                    "TipoPregunta"
+                ],
+                "summary": "Obtener lista de tipos de preguntas",
+                "operationId": "941be08b5ee8d32d5199492c0e11de17",
+                "responses": {
+                    "200": {
+                        "description": "Lista de tipos de preguntas"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "TipoPregunta"
+                ],
+                "summary": "Crear un nuevo tipo de pregunta",
+                "operationId": "ad6e022a76afed778ffc3091ee44cb49",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Pregunta Abierta"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tipo de pregunta creado"
+                    },
+                    "400": {
+                        "description": "Error de validación"
+                    }
+                }
+            }
+        },
+        "/api/tipo_pregunta/{id}": {
+            "get": {
+                "tags": [
+                    "TipoPregunta"
+                ],
+                "summary": "Obtener un tipo de pregunta por ID",
+                "operationId": "129042d83c5037bd8a52fb5230c9b7d7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Datos del tipo de pregunta"
+                    },
+                    "404": {
+                        "description": "Tipo de pregunta no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "TipoPregunta"
+                ],
+                "summary": "Actualizar un tipo de pregunta",
+                "operationId": "9e9f3b4f6fa1da00df81927a7f045901",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Pregunta Cerrada"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Tipo de pregunta actualizado"
+                    },
+                    "400": {
+                        "description": "Error de validación"
+                    },
+                    "404": {
+                        "description": "Tipo de pregunta no encontrado"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "TipoPregunta"
+                ],
+                "summary": "Eliminar un tipo de pregunta",
+                "operationId": "d70b106e73dfe5f4e0d8dba71a19f80b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Tipo de pregunta eliminado"
+                    },
+                    "404": {
+                        "description": "Tipo de pregunta no encontrado"
+                    }
+                }
+            }
+        },
+        "/api/usuarios": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Lista todos los usuarios",
+                "operationId": "e9d4d8b419dbef04b5748fbf9ccf3881",
+                "responses": {
+                    "200": {
+                        "description": "Lista de usuarios"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Crear un usuario",
+                "operationId": "4e9dbcbdaaaf9faab196a82d5cbaea23",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Juan Pérez"
+                                    },
+                                    "correo": {
+                                        "type": "string",
+                                        "example": "juan@example.com"
+                                    },
+                                    "contrasena": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "id_rol": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario creado exitosamente"
+                    }
+                }
+            }
+        },
+        "/api/usuarios/{id}": {
+            "get": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Obtener un usuario por ID",
+                "operationId": "e9ac05ddc4ea46d8848b012d7d92e3ac",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Detalles del usuario"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Actualizar un usuario",
+                "operationId": "27ac608b6dd8b8e7c7c45b10c5210b3e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string",
+                                        "example": "Juan Pérez"
+                                    },
+                                    "correo": {
+                                        "type": "string",
+                                        "example": "juan@example.com"
+                                    },
+                                    "contrasena": {
+                                        "type": "string",
+                                        "example": "newpassword123"
+                                    },
+                                    "id_rol": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario actualizado correctamente"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Usuarios"
+                ],
+                "summary": "Eliminar un usuario",
+                "operationId": "ea700764859a665afd38bb39c2842f1c",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario eliminado correctamente"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Usuario": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "nombre": {
+                        "type": "string",
+                        "example": "Juan Pérez"
+                    },
+                    "correo": {
+                        "type": "string",
+                        "example": "juan@example.com"
+                    },
+                    "fecha_registro": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-01-01"
+                    },
+                    "id_rol": {
+                        "type": "integer",
+                        "example": 2
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Comentarios",
+            "description": "Operaciones relacionadas con los comentarios del foro"
+        },
+        {
+            "name": "Ejercicios",
+            "description": "Operaciones relacionadas con los ejercicios"
+        },
+        {
+            "name": "Lecciones",
+            "description": "Gestión de lecciones"
+        },
+        {
+            "name": "Niveles",
+            "description": "Gestión de niveles"
+        },
+        {
+            "name": "Permisos",
+            "description": "Gestión de permisos en el sistema"
+        },
+        {
+            "name": "ProgresoUsuario",
+            "description": "Operaciones sobre el progreso del usuario en las lecciones"
+        },
+        {
+            "name": "Rachas",
+            "description": "Operaciones relacionadas con las rachas de usuarios"
+        },
+        {
+            "name": "Reportes",
+            "description": "Operaciones relacionadas con reportes"
+        },
+        {
+            "name": "Roles",
+            "description": "Operaciones relacionadas con roles"
+        },
+        {
+            "name": "TipoPregunta",
+            "description": "Endpoints para gestionar tipos de preguntas"
+        },
+        {
+            "name": "Usuarios",
+            "description": "Usuarios"
+        }
+    ]
+}
