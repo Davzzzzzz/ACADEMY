@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Comentario;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 /**
  * @OA\Tag(
  *     name="Comentarios",
@@ -156,18 +156,20 @@ class ComentarioController extends Controller
      *     @OA\Response(response=404, description="Comentario no encontrado")
      * )
      */
-    public function destroy($id)
-    {
-        // Buscar el comentario por la columna 'id', que es la clave primaria por defecto
-        $comentario = Comentario::find($id);
 
-        if (!$comentario) {
-            return response()->json(['message' => 'Comentario no encontrado'], 404);
-        }
 
-        // Eliminamos el comentario
-        $comentario->delete();
+public function destroy($id)
+{
+    $comentario = Comentario::find($id);
 
-        return response()->json(['message' => 'Comentario eliminado correctamente'], 200);
+    if (!$comentario) {
+        return response()->json(['message' => 'Comentario no encontrado'], 404);
     }
+
+    $comentario->delete(); // 👈 Aquí ya hace SoftDelete si está habilitado
+
+    return response()->json(['message' => 'Comentario eliminado correctamente'], 200);
+}
+
+
 }

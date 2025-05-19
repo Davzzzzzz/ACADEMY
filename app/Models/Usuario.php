@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Laravel\Sanctum\HasApiTokens; // 🔥 Agregado aquí
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Sanctum\HasApiTokens;
 
 class Usuario extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable; // 🔥 Agregado HasApiTokens
-
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $table = 'usuario';
     protected $primaryKey = 'id';
@@ -33,24 +33,21 @@ class Usuario extends Authenticatable
         'fecha_registro' => 'datetime',
     ];
 
-    /**
-     * Laravel usará este método para obtener el campo contraseña personalizado.
-     */
+    protected $dates = ['deleted_at']; // importante para el soft delete
+
+    // Laravel usará este método para obtener el campo contraseña personalizado.
     public function getAuthPassword()
     {
         return $this->contrasena;
     }
 
-    /**
-     * Laravel usará este campo como identificador (en vez de 'email')
-     */
+    // Laravel usará este campo como identificador (en vez de 'email')
     public function getAuthIdentifierName()
     {
         return 'correo';
     }
 
     // Relaciones
-
     public function rol()
     {
         return $this->belongsTo(Rol::class, 'id_rol');
@@ -68,8 +65,9 @@ class Usuario extends Authenticatable
 
     public function racha()
     {
-        return $this->hasOne(Racha::class, 'id');
+    return $this->hasOne(Racha::class, 'id', 'id_racha');
     }
+
 
     public function progresoUsuario()
     {

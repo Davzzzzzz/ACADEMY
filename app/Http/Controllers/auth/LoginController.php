@@ -7,9 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Usuario;
+use App\Services\RachaService;  // <-- Importa el servicio
 
 class LoginController extends Controller
 {
+    protected $rachaService;
+
+    public function __construct(RachaService $rachaService)
+    {
+        $this->rachaService = $rachaService;
+    }
+
     public function showLoginForm()
     {
         return view('auth.login');
@@ -28,6 +36,9 @@ class LoginController extends Controller
         if ($usuario && Hash::check($request->contrasena, $usuario->contrasena)) {
             Auth::login($usuario);
             $request->session()->regenerate();
+
+            // Actualizar la racha justo después de login
+            $this->rachaService->actualizarRacha($usuario);
 
             return redirect()->intended(route('inicio'));
         }

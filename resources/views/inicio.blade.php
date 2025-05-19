@@ -9,6 +9,11 @@
         <a href="{{ route('foros.index') }}" class="btn btn-sm btn-outline-secondary me-2">Foros</a>
 
         @auth
+            {{-- Mostrar botón Dashboard solo a administradores --}}
+            @if (Auth::user()->id_rol == 1)
+                <a href="{{ route('admin.dashboard') }}" class="btn btn-sm btn-outline-dark me-2">Dashboard</a>
+            @endif
+
             <span class="me-2">Bienvenido a tu cuenta, {{ Auth::user()->nombre }} 👋</span>
             <form method="POST" action="{{ route('logout') }}" class="d-inline">
                 @csrf
@@ -29,12 +34,12 @@
             @php
                 $cardWidth = 180;
                 $cardHeight = 140;
-                $gapX = 60; // Espacio horizontal entre tarjetas
-                $gapY = 80; // Espacio vertical entre tarjetas
+                $gapX = 60;
+                $gapY = 80;
 
                 $x = 0;
                 $y = 0;
-                $direction = 1; // 1 = ↘️, -1 = ↙️
+                $direction = 1;
             @endphp
 
             @foreach ($lecciones as $index => $leccion)
@@ -42,7 +47,6 @@
                     $left = $x;
                     $top = $y;
 
-                    // Alternamos dirección
                     if ($direction === 1) {
                         $x += $cardWidth + $gapX;
                         $y += $gapY;
@@ -66,9 +70,10 @@
         </div>
     </div>
 
-    {{-- Parte derecha: progreso --}}
+    {{-- Parte derecha: progreso y racha --}}
     <div class="w-25 text-center">
-        <div class="card">
+        {{-- Progreso --}}
+        <div class="card mb-3">
             <div class="card-body">
                 <h5>Progreso</h5>
                 <svg width="100" height="100">
@@ -80,6 +85,15 @@
                     <text x="50%" y="50%" text-anchor="middle" dy=".3em">{{ $progreso }}%</text>
                 </svg>
                 <button class="btn btn-success mt-2">Fortalecer</button>
+            </div>
+        </div>
+
+        {{-- Racha --}}
+        <div class="card">
+            <div class="card-body">
+                <h5>🔥 Racha</h5>
+                <p class="fs-3">{{ $racha }} días</p>
+                <p class="text-muted">¡Sigue así!</p>
             </div>
         </div>
     </div>

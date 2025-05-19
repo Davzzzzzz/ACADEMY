@@ -4,71 +4,42 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Usuario;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * @OA\Info(
- *     version="1.0.0",
- *     title="API Foro Laravel"
- * )
- */
-
-/**
- * @OA\Schema(
- *   schema="Usuario",
- *   type="object",
- *   @OA\Property(property="id", type="integer", example=1),
- *   @OA\Property(property="nombre", type="string", example="Juan Pérez"),
- *   @OA\Property(property="correo", type="string", example="juan@example.com"),
- *   @OA\Property(property="fecha_registro", type="string", format="date", example="2024-01-01"),
- *   @OA\Property(property="id_rol", type="integer", example=2)
- * )
- */
 class UsuarioController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth:sanctum');
-        //$this->middleware('admin')->only(['destroy']);
+        // $this->middleware('auth:sanctum');
+        // $this->middleware('admin')->only(['destroy']);
     }
 
     /**
-     * @OA\Get(
-     *   path="/api/usuarios",
-     *   tags={"Usuarios"},
-     *   summary="Lista todos los usuarios",
-     *   @OA\Response(response=200, description="Lista de usuarios")
-     * )
+     * Mostrar todos los usuarios (vista o API).
      */
     public function index()
     {
-        return response()->json(Usuario::all());
+        $usuarios = Usuario::all();
+        return view('admin.dashboard', compact('usuarios'));
     }
 
     /**
-     * @OA\Post(
-     *   path="/api/usuarios",
-     *   tags={"Usuarios"},
-     *   summary="Crear un usuario",
-     *   @OA\RequestBody(
-     *     required=true,
-     *     @OA\JsonContent(
-     *       @OA\Property(property="nombre", type="string", example="Juan Pérez"),
-     *       @OA\Property(property="correo", type="string", example="juan@example.com"),
-     *       @OA\Property(property="contrasena", type="string", example="password123"),
-     *       @OA\Property(property="id_rol", type="integer", example=2)
-     *     )
-     *   ),
-     *   @OA\Response(response=201, description="Usuario creado exitosamente")
-     * )
+     * Mostrar el formulario para crear un nuevo usuario.
+     */
+    public function create()
+    {
+        return view('admin.create');
+    }
+
+    /**
+     * Guardar un nuevo usuario en la base de datos.
      */
     public function store(Request $request)
     {
         $request->validate([
             'nombre' => 'required|string|max:100',
             'correo' => 'required|email|unique:usuario,correo',
-            'contrasena' => 'required|string|min:8',
+            'contrasena' => 'required|string|min:2',
             'id_rol' => 'required|integer',
         ]);
 
@@ -80,17 +51,11 @@ class UsuarioController extends Controller
         $usuario->id_rol = $request->id_rol;
         $usuario->save();
 
-        return response()->json($usuario, 201);
+        return redirect()->route('dashboard')->with('success', 'Usuario creado correctamente.');
     }
 
     /**
-     * @OA\Get(
-     *   path="/api/usuarios/{id}",
-     *   tags={"Usuarios"},
-     *   summary="Obtener un usuario por ID",
-     *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *   @OA\Response(response=200, description="Detalles del usuario")
-     * )
+     * Mostrar un usuario por su ID (API).
      */
     public function show($id)
     {
@@ -98,22 +63,16 @@ class UsuarioController extends Controller
     }
 
     /**
-     * @OA\Put(
-     *   path="/api/usuarios/{id}",
-     *   tags={"Usuarios"},
-     *   summary="Actualizar un usuario",
-     *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *   @OA\RequestBody(
-     *     required=true,
-     *     @OA\JsonContent(
-     *       @OA\Property(property="nombre", type="string", example="Juan Pérez"),
-     *       @OA\Property(property="correo", type="string", example="juan@example.com"),
-     *       @OA\Property(property="contrasena", type="string", example="newpassword123"),
-     *       @OA\Property(property="id_rol", type="integer", example=2)
-     *     )
-     *   ),
-     *   @OA\Response(response=200, description="Usuario actualizado correctamente")
-     * )
+     * Mostrar el formulario de edición para un usuario.
+     */
+    public function edit($id)
+    {
+        $usuario = Usuario::findOrFail($id);
+        return view('admin.edit', compact('usuario'));
+    }
+
+    /**
+     * Actualizar los datos de un usuario.
      */
     public function update(Request $request, $id)
     {
@@ -122,43 +81,36 @@ class UsuarioController extends Controller
         $request->validate([
             'nombre' => 'sometimes|required|string|max:100',
             'correo' => 'sometimes|required|email|unique:usuario,correo,' . $usuario->id . ',id',
-            'contrasena' => 'sometimes|nullable|string|min:8',
+            'contrasena' => 'sometimes|nullable|string|min:2',
             'id_rol' => 'sometimes|required|integer',
         ]);
 
         $usuario->nombre = $request->nombre ?? $usuario->nombre;
         $usuario->correo = $request->correo ?? $usuario->correo;
+
         if ($request->filled('contrasena')) {
             $usuario->contrasena = bcrypt($request->contrasena);
         }
+
         $usuario->id_rol = $request->id_rol ?? $usuario->id_rol;
         $usuario->save();
 
-        return response()->json($usuario);
+        return redirect()->route('dashboard')->with('success', 'Usuario actualizado correctamente.');
     }
 
-     /**
-     * @OA\Delete(
-     *   path="/api/usuarios/{id}",
-     *   tags={"Usuarios"},
-     *   summary="Eliminar un usuario",
-     *   @OA\Parameter(name="id", in="path", required=true, @OA\Schema(type="integer")),
-     *   @OA\Response(response=200, description="Usuario eliminado correctamente")
-     * )
+    /**
+     * Eliminar un usuario (borrado lógico o físico).
      */
     public function destroy($id)
-{
-    // Buscar el usuario por la columna 'id', que es la clave primaria por defecto
-    $usuario = Usuario::find($id);
+    {
+        $usuario = Usuario::find($id);
 
-    if (!$usuario) {
-        return response()->json(['message' => 'Usuario no encontrado'], 404);
+        if (!$usuario) {
+            return redirect()->route('dashboard')->with('error', 'Usuario no encontrado.');
+        }
+
+        $usuario->delete();
+
+        return redirect()->route('dashboard')->with('success', 'Usuario eliminado correctamente.');
     }
-
-    // Eliminamos el usuario
-    $usuario->delete();
-
-    return response()->json(['message' => 'Usuario eliminado correctamente'], 200);
-}
-
 }
