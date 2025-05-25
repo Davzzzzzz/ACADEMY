@@ -12,7 +12,7 @@ class LeccionAdminController extends Controller
     // Listar todas las lecciones
     public function index()
     {
-        $lecciones = Leccion::with('nivel')->get();
+        $lecciones = Leccion::paginate(10);
         return view('admin.lecciones.index', compact('lecciones'));
     }
 
@@ -30,25 +30,28 @@ class LeccionAdminController extends Controller
             'id_nivel' => 'required|exists:niveles,id_nivel',
             'titulo' => 'required|string|max:255',
             'contenido' => 'required|string',
+        ], [
+            'id_nivel.required' => 'El campo nivel es obligatorio.',
+            'id_nivel.exists' => 'El nivel seleccionado no es válido.',
+            'titulo.required' => 'El título es obligatorio.',
+            'titulo.max' => 'El título no puede tener más de 255 caracteres.',
+            'contenido.required' => 'El contenido no puede estar vacío.',
         ]);
 
-        Leccion::create([
-            'id_nivel' => $request->id_nivel,
-            'titulo' => $request->titulo,
-            'contenido' => $request->contenido,
-        ]);
+        Leccion::create($request->only(['id_nivel', 'titulo', 'contenido']));
 
-        return redirect()->route('admin.lecciones.index')->with('success', 'Lección creada correctamente.');
+        return redirect()->route('admin.lecciones.index')
+                         ->with('success', 'Lección creada correctamente.');
     }
 
-    // Mostrar una lección
+    // Mostrar detalles de una lección
     public function show($id)
     {
         $leccion = Leccion::with('nivel')->findOrFail($id);
         return view('admin.lecciones.show', compact('leccion'));
     }
 
-    // Mostrar formulario para editar
+    // Mostrar formulario para editar una lección
     public function edit($id)
     {
         $leccion = Leccion::findOrFail($id);
@@ -56,7 +59,7 @@ class LeccionAdminController extends Controller
         return view('admin.lecciones.edit', compact('leccion', 'niveles'));
     }
 
-    // Actualizar lección
+    // Actualizar una lección existente
     public function update(Request $request, $id)
     {
         $leccion = Leccion::findOrFail($id);
@@ -65,23 +68,27 @@ class LeccionAdminController extends Controller
             'id_nivel' => 'required|exists:niveles,id_nivel',
             'titulo' => 'required|string|max:255',
             'contenido' => 'required|string',
+        ], [
+            'id_nivel.required' => 'El campo nivel es obligatorio.',
+            'id_nivel.exists' => 'El nivel seleccionado no es válido.',
+            'titulo.required' => 'El título es obligatorio.',
+            'titulo.max' => 'El título no puede tener más de 255 caracteres.',
+            'contenido.required' => 'El contenido no puede estar vacío.',
         ]);
 
-        $leccion->update([
-            'id_nivel' => $request->id_nivel,
-            'titulo' => $request->titulo,
-            'contenido' => $request->contenido,
-        ]);
+        $leccion->update($request->only(['id_nivel', 'titulo', 'contenido']));
 
-        return redirect()->route('admin.lecciones.index')->with('success', 'Lección actualizada correctamente.');
+        return redirect()->route('admin.lecciones.index')
+                         ->with('success', 'Lección actualizada correctamente.');
     }
 
-    // Eliminar lección
+    // Eliminar una lección
     public function destroy($id)
     {
         $leccion = Leccion::findOrFail($id);
         $leccion->delete();
 
-        return redirect()->route('admin.lecciones.index')->with('success', 'Lección eliminada correctamente.');
+        return redirect()->route('admin.lecciones.index')
+                         ->with('success', 'Lección eliminada correctamente.');
     }
 }

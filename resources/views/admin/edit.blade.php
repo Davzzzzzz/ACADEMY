@@ -17,9 +17,9 @@
     @endif
 
     {{-- Formulario para editar usuario --}}
-    <form action="{{ route('admin.usuarios.update', $usuario->id) }}" method="POST">
+    <form action="{{ route('usuarios.update', $usuario->id) }}" method="POST">
         @csrf
-        @method('PUT')
+        @method('PUT') {{-- Usamos PUT para actualizar --}}
 
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre</label>
@@ -37,19 +37,12 @@
         </div>
 
         <div class="mb-3">
-            <label for="id_rol" class="form-label">Rol</label>
-            <select name="id_rol" id="id_rol" class="form-select" required>
-                <option value="">Selecciona un rol</option>
-                @foreach ($roles as $rol)
-                    <option value="{{ $rol->id }}" {{ old('id_rol', $usuario->id_rol) == $rol->id ? 'selected' : '' }}>
-                        {{ $rol->nombre }}
-                    </option>
-                @endforeach
-            </select>
+            <label for="id_rol" class="form-label">Rol (ID)</label>
+            <input type="number" name="id_rol" id="id_rol" value="{{ old('id_rol', $usuario->id_rol) }}" class="form-control" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Actualizar</button>
-        <a href="{{ route('admin.usuarios.index') }}" class="btn btn-secondary">Cancelar</a>
+        <a href="{{ route('dashboard') }}" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
 @endsection

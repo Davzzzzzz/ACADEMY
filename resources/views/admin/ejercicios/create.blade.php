@@ -40,26 +40,29 @@
             <input type="text" id="pregunta" name="pregunta" class="form-control" required>
         </div>
 
-        {{-- Imagen --}}
+        {{-- Imagen pregunta --}}
         <div class="form-group">
-            <label for="imagen_pregunta">Imagen (opcional)</label>
-            <input type="file" id="imagen_pregunta" name="imagen_pregunta" class="form-control">
+            <label for="imagen_pregunta">Imagen de la pregunta (opcional)</label>
+            <input type="file" id="imagen_pregunta" name="imagen_pregunta" class="form-control mb-1">
+            <input type="text" id="nombre_archivo_pregunta" name="nombre_archivo_pregunta" class="form-control" placeholder="Nombre del archivo para imagen pregunta (ejemplo: c.png)">
         </div>
 
         {{-- Opciones --}}
         <div class="form-group">
-            <label for="opciones-container">Opciones</label>
+            <label>Opciones</label>
             <div id="opciones-container">
-                <input type="text" name="opciones[]" class="form-control mb-2" placeholder="Opción 1">
-                <input type="text" name="opciones[]" class="form-control mb-2" placeholder="Opción 2">
-                <input type="text" name="opciones[]" class="form-control mb-2" placeholder="Opción 3">
+                <div class="mb-3">
+                    <input type="text" name="opciones_texto[]" class="form-control mb-1" placeholder="Texto de opción (opcional)">
+                    <input type="file" name="opciones_imagen[]" class="form-control mb-1">
+                    <input type="text" name="nombre_archivo_opciones[]" class="form-control" placeholder="Nombre archivo para imagen opción (ejemplo: opcion1.png)">
+                </div>
             </div>
-            <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="agregarOpcion()">Agregar opción</button>
+            <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="agregarOpcion()">Agregar otra opción</button>
         </div>
 
         {{-- Respuesta correcta --}}
         <div class="form-group">
-            <label for="respuesta_correcta">Respuesta Correcta</label>
+            <label for="respuesta_correcta">Respuesta Correcta (texto o nombre de archivo)</label>
             <input type="text" id="respuesta_correcta" name="respuesta_correcta" class="form-control" required>
         </div>
 
@@ -71,12 +74,14 @@
 <script>
 function agregarOpcion() {
     const container = document.getElementById('opciones-container');
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.name = 'opciones[]';
-    input.className = 'form-control mb-2';
-    input.placeholder = 'Otra opción';
-    container.appendChild(input);
+    const div = document.createElement('div');
+    div.className = 'mb-3';
+    div.innerHTML = `
+        <input type="text" name="opciones_texto[]" class="form-control mb-1" placeholder="Texto de opción (opcional)">
+        <input type="file" name="opciones_imagen[]" class="form-control mb-1">
+        <input type="text" name="nombre_archivo_opciones[]" class="form-control" placeholder="Nombre archivo para imagen opción (ejemplo: opcion2.png)">
+    `;
+    container.appendChild(div);
 }
 </script>
 @endsection

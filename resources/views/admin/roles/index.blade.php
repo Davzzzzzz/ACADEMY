@@ -7,10 +7,37 @@
         {{-- Panel lateral --}}
         <div class="col-md-3">
             <div class="list-group mb-4">
-                <a href="{{ route('admin.dashboard') }}" class="list-group-item list-group-item-action">
+                <a href="{{ route('admin.dashboard') }}" class="list-group-item list-group-item-action active">
                     <i class="bi bi-speedometer2"></i> Panel de Administración
                 </a>
-                <a href="{{ route('admin.roles.index') }}" class="list-group-item list-group-item-action active">
+                <a href="{{ route('admin.usuarios.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-people"></i> Usuarios
+                </a>
+                <a href="{{ route('admin.foros.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-chat-left-text"></i> Foros
+                </a>
+                <a href="{{ route('admin.comentarios.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-chat-dots"></i> Comentarios
+                </a>
+                <a href="{{ route('admin.reportes.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-flag"></i> Reportes
+                </a>
+                <a href="{{ route('admin.progresousuario.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-bar-chart-line"></i> Progreso Usuario
+                </a>
+                <a href="{{ route('admin.rachas.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-fire"></i> Racha
+                </a>
+                <a href="{{ route('admin.ejercicios.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-pencil-square"></i> Ejercicios
+                </a>
+                <a href="{{ route('admin.lecciones.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-journal-bookmark"></i> Lecciones
+                </a>
+                <a href="{{ route('admin.niveles.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-trophy"></i> Niveles
+                </a>
+                <a href="{{ route('admin.roles.index') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-person-badge"></i> Roles
                 </a>
             </div>
@@ -44,7 +71,6 @@
                             <td>{{ $rol->nombre }}</td>
                             <td>{{ $rol->usuarios->count() }}</td>
                             <td>
-                                <a href="{{ route('admin.roles.show', $rol->id) }}" class="btn btn-sm btn-info">Ver</a>
                                 <a href="{{ route('admin.roles.edit', $rol->id) }}" class="btn btn-sm btn-primary">Editar</a>
                                 <form action="{{ route('admin.roles.destroy', $rol->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Eliminar este rol?')">
                                     @csrf
@@ -55,9 +81,23 @@
                         </tr>
                     @endforeach
                 </tbody>
-            </table>
+                        </table>
 
-        </div>
-    </div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <small>
+                        Mostrando
+                        {{ $roles->firstItem() ?? 0 }}
+                        -
+                        {{ $roles->lastItem() ?? 0 }}
+                        de
+                        {{ $roles->total() }}
+                        roles
+                    </small>
+                </div>
+                <div>
+                    {{ $roles->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
 </div>
 @endsection

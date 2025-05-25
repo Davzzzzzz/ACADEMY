@@ -16,6 +16,8 @@ use App\Http\Controllers\ComentarioController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\ProgresoUsuarioController;
 use App\Http\Controllers\PublicacionController;
+use App\Http\Controllers\CertificadoController; // <- agregado aquí
+
 
 // Login / Logout
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -29,15 +31,31 @@ Route::post('/register', [RegisterController::class, 'store']);
 // Inicio (principal)
 Route::get('/inicio', [InicioController::class, 'index'])->name('inicio')->middleware('auth');
 
-// Publicaciones
-Route::post('/publicaciones', [PublicacionController::class, 'store'])->name('publicaciones.store');
-Route::get('/publicaciones/{id}/editar', [PublicacionController::class, 'edit'])->name('publicaciones.edit');
-Route::put('/publicaciones/{id}', [PublicacionController::class, 'update'])->name('publicaciones.update');
+Route::resource('comentarios', ComentarioController::class)->only(['store']);
+
+Route::post('/comentarios/{comentario}/report', [ComentarioController::class, 'report'])
+    ->middleware('auth')
+    ->name('comentarios.report');
+
+// Publicaciones (solo usuarios autenticados)
+Route::middleware('auth')->group(function () {
+    Route::get('/publicaciones/crear/{foro}', [PublicacionController::class, 'create'])->name('publicaciones.create');
+    Route::post('/publicaciones', [PublicacionController::class, 'store'])->name('publicaciones.store');
+    Route::get('/publicaciones/{id}', [PublicacionController::class, 'show'])->name('publicaciones.show');
+    Route::get('/publicaciones/{id}/editar', [PublicacionController::class, 'edit'])->name('publicaciones.edit');
+    Route::put('/publicaciones/{id}', [PublicacionController::class, 'update'])->name('publicaciones.update');
+    Route::delete('/publicaciones/{id}', [PublicacionController::class, 'destroy'])->name('publicaciones.destroy');
+});
+
+Route::post('/progreso-usuario/sumar', [App\Http\Controllers\EjercicioController::class, 'sumarEjercicio'])->middleware('auth');
 
 // Foros (solo usuarios autenticados)
 Route::middleware('auth')->group(function () {
     Route::resource('foros', ForoController::class);
     Route::get('/lecciones/{id}/ejercicios', [EjercicioController::class, 'mostrarEjercicios'])->name('lecciones.ejercicios');
+
+    // Certificado PDF — Ruta protegida para usuarios autenticados
+  Route::get('/certificado', [CertificadoController::class, 'generar'])->name('certificado.generar')->middleware('auth');
 });
 
 // Panel de administración (solo admin)

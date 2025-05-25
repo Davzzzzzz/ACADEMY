@@ -13,7 +13,7 @@ class RolAdminController extends Controller
      */
     public function index()
     {
-        $roles = Rol::with('usuarios')->get();
+        $roles = Rol::with('usuarios')->paginate(10); // O el número que prefieras
         return view('admin.roles.index', compact('roles'));
     }
 

@@ -16,6 +16,7 @@ class Publicacion extends Model
         'foro_id',
         'parent_id',
         'contenido',
+        'id_usuario', // <-- ¡AGREGADO!
     ];
 
     /**
@@ -23,7 +24,7 @@ class Publicacion extends Model
      */
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'id');
+        return $this->belongsTo(Usuario::class, 'id_usuario'); // <-- CORREGIDO
     }
 
     /**
@@ -50,4 +51,3 @@ class Publicacion extends Model
         return $this->belongsTo(Publicacion::class, 'parent_id');
     }
 }
-

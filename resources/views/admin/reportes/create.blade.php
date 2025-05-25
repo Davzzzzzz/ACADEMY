@@ -37,19 +37,40 @@
                 @csrf
 
                 <div class="mb-3">
-                    <label for="id_usuario" class="form-label">ID del Usuario</label>
-                    <input type="number" name="id_usuario" id="id_usuario" class="form-control" value="{{ old('id_usuario') }}" required>
+                    <label for="id_usuario" class="form-label">Usuario que reporta</label>
+                    <select name="id_usuario" id="id_usuario" class="form-control" required>
+                        <option value="">Selecciona un usuario</option>
+                        @foreach($usuarios as $usuario)
+                            <option value="{{ $usuario->id }}" {{ old('id_usuario') == $usuario->id ? 'selected' : '' }}>
+                                {{ $usuario->nombre }} ({{ $usuario->correo }})
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
 
                 <div class="mb-3">
-                    <label for="descripcion" class="form-label">Descripción</label>
+                    <label for="id_comentario" class="form-label">Comentario reportado</label>
+                    <select name="id_comentario" id="id_comentario" class="form-control" required>
+                        <option value="">Selecciona un comentario</option>
+                        @foreach($comentarios as $comentario)
+                            <option value="{{ $comentario->id }}" {{ old('id_comentario') == $comentario->id ? 'selected' : '' }}>
+                                {{ Str::limit($comentario->contenido, 40) }} - {{ $comentario->usuario->nombre ?? 'Sin autor' }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Motivo del reporte</label>
                     <textarea name="descripcion" id="descripcion" class="form-control" rows="4" required>{{ old('descripcion') }}</textarea>
                 </div>
-                <!-- Campo de fecha_reporte -->
-    <div class="mb-3">
-        <label for="fecha_reporte" class="form-label">Fecha del reporte</label>
-        <input type="date" name="fecha_reporte" id="fecha_reporte" class="form-control" value="{{ old('fecha_reporte') }}" required>
-    </div>
+
+                <div class="mb-3">
+                    <label for="fecha_reporte" class="form-label">Fecha del reporte</label>
+                    <input type="date" name="fecha_reporte" id="fecha_reporte" class="form-control"
+                           value="{{ old('fecha_reporte', \Carbon\Carbon::now()->format('Y-m-d')) }}" required>
+                </div>
+
                 <button type="submit" class="btn btn-success">Guardar Reporte</button>
                 <a href="{{ route('admin.reportes.index') }}" class="btn btn-secondary">Cancelar</a>
             </form>

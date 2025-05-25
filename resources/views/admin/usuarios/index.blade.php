@@ -83,10 +83,23 @@
                             </td>
                         </tr>
                     @endforeach
-                </tbody>
-            </table>
-        </div>
+                            </table>
 
-    </div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <small>
+                        Mostrando
+                        {{ $usuarios->firstItem() ?? 0 }}
+                        -
+                        {{ $usuarios->lastItem() ?? 0 }}
+                        de
+                        {{ $usuarios->total() }}
+                        usuarios
+                    </small>
+                </div>
+                <div>
+                    {{ $usuarios->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
 </div>
 @endsection

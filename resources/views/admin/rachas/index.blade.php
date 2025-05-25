@@ -12,10 +12,36 @@
                 <a href="{{ route('admin.dashboard') }}" class="list-group-item list-group-item-action active">
                     <i class="bi bi-speedometer2"></i> Panel de Administración
                 </a>
-                <a href="{{ route('admin.rachas.index') }}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-fire"></i> Rachas
+                <a href="{{ route('admin.usuarios.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-people"></i> Usuarios
                 </a>
-                {{-- Agrega aquí más links si quieres --}}
+                <a href="{{ route('admin.foros.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-chat-left-text"></i> Foros
+                </a>
+                <a href="{{ route('admin.comentarios.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-chat-dots"></i> Comentarios
+                </a>
+                <a href="{{ route('admin.reportes.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-flag"></i> Reportes
+                </a>
+                <a href="{{ route('admin.progresousuario.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-bar-chart-line"></i> Progreso Usuario
+                </a>
+                <a href="{{ route('admin.rachas.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-fire"></i> Racha
+                </a>
+                <a href="{{ route('admin.ejercicios.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-pencil-square"></i> Ejercicios
+                </a>
+                <a href="{{ route('admin.lecciones.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-journal-bookmark"></i> Lecciones
+                </a>
+                <a href="{{ route('admin.niveles.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-trophy"></i> Niveles
+                </a>
+                <a href="{{ route('admin.roles.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-person-badge"></i> Roles
+                </a>
             </div>
         </div>
 
@@ -61,9 +87,22 @@
                 </tbody>
             </table>
 
-            {{-- Paginación si usas paginate() --}}
-            {{ $rachas->links() }}
-
+            <div class="d-flex justify-content-between align-items-center mt-4">
+    <div>
+        <small>
+            Mostrando
+            {{ $rachas->firstItem() ?? 0 }}
+            -
+            {{ $rachas->lastItem() ?? 0 }}
+            de
+            {{ $rachas->total() }}
+            rachas
+        </small>
+    </div>
+    <div>
+        {{ $rachas->links('pagination::bootstrap-5') }}
+    </div>
+</div>
         </div>
     </div>
 </div>

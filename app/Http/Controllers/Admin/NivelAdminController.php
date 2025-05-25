@@ -8,28 +8,31 @@ use App\Models\Nivel;
 
 class NivelAdminController extends Controller
 {
-    // Listar todos los niveles
+    // Mostrar lista de niveles
     public function index()
     {
-        $niveles = Nivel::all();
+        $niveles = Nivel::paginate(10);
         return view('admin.niveles.index', compact('niveles'));
     }
 
-    // Mostrar formulario para crear un nuevo nivel
+    // Formulario para crear nivel
     public function create()
     {
         return view('admin.niveles.create');
     }
 
-    // Guardar nuevo nivel
+    // Guardar nivel nuevo
     public function store(Request $request)
     {
         $request->validate([
             'nombre_nivel' => 'required|string|max:255',
-            'descripcion'  => 'nullable|string',
+            'descripcion'  => 'nullable|string|max:1000',
         ]);
 
-        Nivel::create($request->all());
+        Nivel::create([
+            'nombre_nivel' => $request->nombre_nivel,
+            'descripcion'  => $request->descripcion,
+        ]);
 
         return redirect()->route('admin.niveles.index')->with('success', 'Nivel creado correctamente.');
     }
@@ -41,28 +44,31 @@ class NivelAdminController extends Controller
         return view('admin.niveles.show', compact('nivel'));
     }
 
-    // Mostrar formulario para editar un nivel
+    // Formulario para editar nivel
     public function edit($id)
     {
         $nivel = Nivel::findOrFail($id);
         return view('admin.niveles.edit', compact('nivel'));
     }
 
-    // Actualizar un nivel
+    // Actualizar nivel
     public function update(Request $request, $id)
     {
         $request->validate([
             'nombre_nivel' => 'required|string|max:255',
-            'descripcion'  => 'nullable|string',
+            'descripcion'  => 'nullable|string|max:1000',
         ]);
 
         $nivel = Nivel::findOrFail($id);
-        $nivel->update($request->all());
+        $nivel->update([
+            'nombre_nivel' => $request->nombre_nivel,
+            'descripcion'  => $request->descripcion,
+        ]);
 
         return redirect()->route('admin.niveles.index')->with('success', 'Nivel actualizado correctamente.');
     }
 
-    // Eliminar un nivel
+    // Eliminar nivel
     public function destroy($id)
     {
         $nivel = Nivel::findOrFail($id);

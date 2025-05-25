@@ -12,7 +12,7 @@ class RachaAdminController extends Controller
     // Mostrar listado de rachas
     public function index()
     {
-        $rachas = Racha::with('usuario')->paginate(10);
+        $rachas = Racha::with('usuario')->paginate(5);
         return view('admin.rachas.index', compact('rachas'));
     }
 

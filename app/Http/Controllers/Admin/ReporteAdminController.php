@@ -17,12 +17,12 @@ class ReporteAdminController extends Controller
     }
 
     // Mostrar formulario para crear un nuevo reporte
-    public function create()
-    {
-        $usuarios = Usuario::all();
-        return view('admin.reportes.create', compact('usuarios'));
-    }
-
+  public function create()
+{
+    $usuarios = \App\Models\Usuario::all(); // o User::all()
+    $comentarios = \App\Models\Comentario::with('usuario')->get();
+    return view('admin.reportes.create', compact('usuarios', 'comentarios'));
+}
     // Guardar un nuevo reporte
     public function store(Request $request)
     {
@@ -50,11 +50,11 @@ class ReporteAdminController extends Controller
 
     // Mostrar formulario para editar un reporte
     public function edit($id)
-    {
-        $reporte = Reporte::findOrFail($id);
-        $usuarios = Usuario::all();
-        return view('admin.reportes.edit', compact('reporte', 'usuarios'));
-    }
+{
+    $reporte = Reporte::with('comentario')->findOrFail($id);
+    $usuarios = Usuario::all(); // O User::all();
+    return view('admin.reportes.edit', compact('reporte', 'usuarios'));
+}
 
     // Actualizar un reporte existente
     public function update(Request $request, $id)

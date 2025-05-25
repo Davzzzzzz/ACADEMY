@@ -16,15 +16,20 @@ class Reporte extends Model
 
     protected $fillable = [
         'id_usuario',
+        'id_comentario', // <-- Relación con comentario reportado
         'descripcion',
         'fecha_reporte'
     ];
 
-    protected $dates = ['deleted_at']; // Necesario para SoftDeletes
+    protected $dates = ['deleted_at'];
 
     public function usuario()
     {
-    return $this->belongsTo(Usuario::class, 'id_usuario', 'id');
+        return $this->belongsTo(Usuario::class, 'id_usuario', 'id');
     }
 
+    public function comentario()
+    {
+        return $this->belongsTo(Comentario::class, 'id_comentario', 'id');
+    }
 }

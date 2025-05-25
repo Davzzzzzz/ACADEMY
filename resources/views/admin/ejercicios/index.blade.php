@@ -10,11 +10,35 @@
                 <a href="{{ route('admin.dashboard') }}" class="list-group-item list-group-item-action active">
                     <i class="bi bi-speedometer2"></i> Panel de Administración
                 </a>
-                <a href="{{ route('admin.lecciones.index') }}" class="list-group-item list-group-item-action">
-                    <i class="bi bi-journal-bookmark"></i> Lecciones
+                <a href="{{ route('admin.usuarios.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-people"></i> Usuarios
+                </a>
+                <a href="{{ route('admin.foros.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-chat-left-text"></i> Foros
+                </a>
+                <a href="{{ route('admin.comentarios.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-chat-dots"></i> Comentarios
+                </a>
+                <a href="{{ route('admin.reportes.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-flag"></i> Reportes
+                </a>
+                <a href="{{ route('admin.progresousuario.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-bar-chart-line"></i> Progreso Usuario
+                </a>
+                <a href="{{ route('admin.rachas.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-fire"></i> Racha
                 </a>
                 <a href="{{ route('admin.ejercicios.index') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-pencil-square"></i> Ejercicios
+                </a>
+                <a href="{{ route('admin.lecciones.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-journal-bookmark"></i> Lecciones
+                </a>
+                <a href="{{ route('admin.niveles.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-trophy"></i> Niveles
+                </a>
+                <a href="{{ route('admin.roles.index') }}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-person-badge"></i> Roles
                 </a>
             </div>
         </div>
@@ -49,28 +73,40 @@
                             <td>{{ $ejercicio->id_ejercicio }}</td>
                             <td>{{ $ejercicio->leccion->titulo ?? 'Sin lección' }}</td>
                             <td>{{ $ejercicio->pregunta }}</td>
-                            <td>
-    @if($ejercicio->imagen_pregunta)
-        <img src="{{ url($ejercicio->imagen_pregunta) }}" alt="Imagen Pregunta" width="50">
-    @else
-        Sin imagen
-    @endif
-</td>
 
+                            {{-- Imagen de la pregunta --}}
+                            <td>
+                                @if($ejercicio->imagen_pregunta)
+                                    <img src="{{ asset($ejercicio->imagen_pregunta) }}" alt="Imagen Pregunta" width="50">
+                                @else
+                                    Sin imagen
+                                @endif
+                            </td>
+
+                            {{-- Opciones --}}
                             <td>
                                 @if(is_array($ejercicio->opciones))
-                                    <ul>
+                                    <ul style="padding-left: 1rem;">
                                         @foreach($ejercicio->opciones as $opcion)
-                                            <li>{{ $opcion['label'] ?? 'Sin etiqueta' }}</li>
+                                            <li>
+                                                @if(!empty($opcion['imagen']))
+                                                    <img src="{{ asset($opcion['imagen']) }}" alt="Opción Imagen" width="40" class="me-1">
+                                                @endif
+                                                {{ $opcion['label'] ?? 'Sin texto' }}
+                                            </li>
                                         @endforeach
                                     </ul>
                                 @else
                                     <span>Sin opciones</span>
                                 @endif
                             </td>
+
+                            {{-- Respuesta correcta --}}
                             <td>{{ $ejercicio->respuesta_correcta }}</td>
+
+                            {{-- Acciones --}}
                             <td>
-                                <a href="{{ route('admin.ejercicios.edit', $ejercicio->id_ejercicio) }}" class="btn btn-sm btn-primary">Editar</a>
+                                <a href="{{ route('admin.ejercicios.edit', $ejercicio->id_ejercicio) }}" class="btn btn-sm btn-primary mb-1">Editar</a>
                                 <form action="{{ route('admin.ejercicios.destroy', $ejercicio->id_ejercicio) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('¿Eliminar este ejercicio?')">
                                     @csrf
                                     @method('DELETE')
@@ -80,9 +116,23 @@
                         </tr>
                     @endforeach
                 </tbody>
-            </table>
+                        </table>
 
-        </div>
-    </div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <small>
+                        Mostrando
+                        {{ $ejercicios->firstItem() ?? 0 }}
+                        -
+                        {{ $ejercicios->lastItem() ?? 0 }}
+                        de
+                        {{ $ejercicios->total() }}
+                        ejercicios
+                    </small>
+                </div>
+                <div>
+                    {{ $ejercicios->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
 </div>
 @endsection

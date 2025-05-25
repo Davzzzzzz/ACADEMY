@@ -13,7 +13,7 @@ class ComentarioAdminController extends Controller
     // Mostrar lista de comentarios
     public function index()
     {
-        $comentarios = Comentario::with(['usuario', 'foro'])->orderBy('fecha_publicacion', 'desc')->get();
+        $comentarios = Comentario::with(['usuario', 'foro'])->paginate(10);
         return view('admin.comentarios.index', compact('comentarios'));
     }
 

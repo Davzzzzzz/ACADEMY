@@ -38,19 +38,38 @@
                 @method('PUT')
 
                 <div class="mb-3">
-                    <label for="id_usuario" class="form-label">ID del Usuario</label>
-                    <input type="number" name="id_usuario" id="id_usuario" class="form-control" value="{{ old('id_usuario', $reporte->id_usuario) }}" required>
+                    <label class="form-label">ID del Reporte</label>
+                    <input type="text" class="form-control" value="{{ $reporte->id_reporte }}" readonly>
                 </div>
 
                 <div class="mb-3">
-                    <label for="descripcion" class="form-label">Descripción</label>
+                    <label for="id_usuario" class="form-label">Usuario que reporta</label>
+                    <select name="id_usuario" id="id_usuario" class="form-control" required>
+                        @foreach($usuarios as $usuario)
+                            <option value="{{ $usuario->id }}"
+                                {{ old('id_usuario', $reporte->id_usuario) == $usuario->id ? 'selected' : '' }}>
+                                {{ $usuario->nombre }} ({{ $usuario->correo }})
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Comentario reportado</label>
+                    <input type="text" class="form-control"
+                        value="{{ $reporte->comentario->contenido ?? 'Comentario eliminado' }}" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Motivo del reporte</label>
                     <textarea name="descripcion" id="descripcion" class="form-control" rows="4" required>{{ old('descripcion', $reporte->descripcion) }}</textarea>
                 </div>
-<!-- Campo de fecha_reporte -->
-    <div class="mb-3">
-        <label for="fecha_reporte" class="form-label">Fecha del reporte</label>
-        <input type="date" name="fecha_reporte" id="fecha_reporte" class="form-control" value="{{ old('fecha_reporte') }}" required>
-    </div>
+
+                <div class="mb-3">
+                    <label for="fecha_reporte" class="form-label">Fecha del reporte</label>
+                    <input type="date" name="fecha_reporte" id="fecha_reporte" class="form-control"
+                        value="{{ old('fecha_reporte', \Carbon\Carbon::parse($reporte->fecha_reporte)->format('Y-m-d')) }}" required>
+                </div>
                 <button type="submit" class="btn btn-primary">Actualizar Reporte</button>
                 <a href="{{ route('admin.reportes.index') }}" class="btn btn-secondary">Cancelar</a>
             </form>

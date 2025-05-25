@@ -22,9 +22,8 @@ class Foro extends Model
     protected $dates = ['deleted_at']; // importante para SoftDeletes
 
     // Relaciones
-    public function comentarios()
-    {
-        return $this->hasMany(Comentario::class, 'id_foros');
+    public function comentarios(){
+    return $this->hasMany(\App\Models\Comentario::class, 'foro_id');
     }
 
     public function publicaciones()

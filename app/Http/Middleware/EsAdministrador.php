@@ -9,7 +9,7 @@ class EsAdministrador
 {
     public function handle($request, Closure $next)
     {
-        if (Auth::check() && Auth::user()->id_rol == 1) { // Asumiendo que el rol 1 es administrador
+        if (Auth::check() && Auth::user()->id_rol == 2) { // Asumiendo que el rol 1 es administrador
             return $next($request);
         }
 

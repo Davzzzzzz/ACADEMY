@@ -184,41 +184,67 @@ class EjercicioController extends Controller
         $ejercicio->delete();
         return response()->json(['message' => 'Ejercicio eliminado correctamente'], 200);
     }
+
+    /**
+     * Mostrar ejercicios de una lección específica
+     */
     public function mostrarEjercicios($id)
     {
-    $leccion = Leccion::findOrFail($id);
-    $ejercicios = Ejercicio::where('id_leccion', $id)->get();
+        $leccion = Leccion::findOrFail($id);
+        $ejercicios = Ejercicio::where('id_leccion', $id)->get();
 
-    foreach ($ejercicios as $ejercicio) {
-        // Procesar opciones
-        if (is_string($ejercicio->opciones)) {
-            $opcionesArray = json_decode($ejercicio->opciones, true);
+        foreach ($ejercicios as $ejercicio) {
+            // Procesar opciones
+            if (is_string($ejercicio->opciones)) {
+                $opcionesArray = json_decode($ejercicio->opciones, true);
 
-            foreach ($opcionesArray as &$opcion) {
-                if (is_string($opcion)) {
-                    $opcion = ['label' => $opcion];
+                foreach ($opcionesArray as &$opcion) {
+                    if (is_string($opcion)) {
+                        $opcion = ['label' => $opcion];
+                    }
+
+                    $archivoOpcion = 'opciones/' . $ejercicio->id_ejercicio . '_' . $opcion['label'] . '.png';
+
+                    $opcion['imagen'] = Storage::disk('public')->exists($archivoOpcion)
+                        ? asset('storage/' . $archivoOpcion)
+                        : null;
                 }
 
-                $archivoOpcion = 'opciones/' . $ejercicio->id_ejercicio . '_' . $opcion['label'] . '.png';
-
-                $opcion['imagen'] = Storage::disk('public')->exists($archivoOpcion)
-                    ? asset('storage/' . $archivoOpcion)
-                    : null;
+                $ejercicio->opciones = $opcionesArray;
             }
 
-            $ejercicio->opciones = $opcionesArray;
+            // Imagen de la pregunta
+            if (!empty($ejercicio->imagen_pregunta)) {
+                $ejercicio->imagen = asset($ejercicio->imagen_pregunta);
+            } else {
+                $ejercicio->imagen = null;
+            }
         }
 
-        // Imagen de la pregunta
-        if (!empty($ejercicio->imagen_pregunta)) {
-            $ejercicio->imagen = asset($ejercicio->imagen_pregunta);
-        } else {
-            $ejercicio->imagen = null;
-        }
+        return view('ejercicios.index', compact('leccion', 'ejercicios'));
     }
 
-    return view('ejercicios.index', compact('leccion', 'ejercicios'));
-}}
+    /**
+     * Sumar un ejercicio completado al progreso del usuario autenticado
+     */
+    public function sumarEjercicio(Request $request)
+    {
+       $userId = auth()->user()->id;
+        $progreso = \App\Models\ProgresoUsuario::where('id_usuario', $userId)->first();
 
+        if ($progreso) {
+            $progreso->ejercicios_completados += 1;
+            $progreso->save();
+        } else {
+            // Si no existe, lo crea (ajusta id_nivel e id_leccion_actual según tu lógica)
+            $progreso = \App\Models\ProgresoUsuario::create([
+                'id_usuario' => $userId,
+                'id_nivel' => 1,
+                'id_leccion_actual' => $request->id_leccion_actual ?? 1,
+                'ejercicios_completados' => 1,
+            ]);
+        }
 
-
+        return response()->json(['ok' => true, 'ejercicios_completados' => $progreso->ejercicios_completados]);
+    }
+}

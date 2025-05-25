@@ -16,7 +16,7 @@ class ProgresoUsuarioController extends Controller
 {
     public function __construct()
     {
-       // $this->middleware('auth:sanctum');
+        // $this->middleware('auth:sanctum');
     }
 
     /**
@@ -68,6 +68,7 @@ class ProgresoUsuarioController extends Controller
      *         @OA\JsonContent(
      *             required={"id_usuario", "id_leccion_actual", "ejercicios_completados"},
      *             @OA\Property(property="id_usuario", type="integer", example=1),
+     *             @OA\Property(property="id_nivel", type="integer", example=2),
      *             @OA\Property(property="id_leccion_actual", type="integer", example=3),
      *             @OA\Property(property="ejercicios_completados", type="integer", example=10)
      *         )
@@ -80,7 +81,8 @@ class ProgresoUsuarioController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_usuario' => 'required|integer|exists:usuarios,id',
-            'id_leccion_actual' => 'required|integer|exists:lecciones,id',
+            'id_nivel' => 'required|integer|exists:niveles,id_nivel',
+            'id_leccion_actual' => 'required|integer|exists:lecciones,id_leccion',
             'ejercicios_completados' => 'required|integer|min:0',
         ]);
 
@@ -90,7 +92,7 @@ class ProgresoUsuarioController extends Controller
 
         $progreso = ProgresoUsuario::create([
             'id_usuario' => $request->id_usuario,
-            'id_nivel' => $request->id_nivel, // Si lo recibes como parámetro
+            'id_nivel' => $request->id_nivel,
             'id_leccion_actual' => $request->id_leccion_actual,
             'ejercicios_completados' => $request->ejercicios_completados,
         ]);
@@ -113,6 +115,8 @@ class ProgresoUsuarioController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
+     *             @OA\Property(property="id_nivel", type="integer", example=2),
+     *             @OA\Property(property="id_leccion_actual", type="integer", example=4),
      *             @OA\Property(property="ejercicios_completados", type="integer", example=20)
      *         )
      *     ),
@@ -129,6 +133,8 @@ class ProgresoUsuarioController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
+            'id_nivel' => 'sometimes|required|integer|exists:niveles,id_nivel',
+            'id_leccion_actual' => 'sometimes|required|integer|exists:lecciones,id_leccion',
             'ejercicios_completados' => 'sometimes|required|integer|min:0',
         ]);
 
@@ -166,4 +172,24 @@ class ProgresoUsuarioController extends Controller
         $progreso->delete();
         return response()->json(['message' => 'Progreso eliminado correctamente']);
     }
+
+    public function sumarEjercicio(Request $request){
+    $userId = auth()->id();
+    $progreso = \App\Models\ProgresoUsuario::where('id_usuario', $userId)->first();
+
+    if ($progreso) {
+        $progreso->ejercicios_completados += 1;
+        $progreso->save();
+    } else {
+        // Si no existe, lo crea (ajusta id_nivel e id_leccion_actual según tu lógica)
+        $progreso = \App\Models\ProgresoUsuario::create([
+            'id_usuario' => $userId,
+            'id_nivel' => 1,
+            'id_leccion_actual' => $request->id_leccion_actual ?? 1,
+            'ejercicios_completados' => 1,
+        ]);
+    }
+
+    return response()->json(['ok' => true, 'ejercicios_completados' => $progreso->ejercicios_completados]);
+}
 }

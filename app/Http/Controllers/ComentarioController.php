@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Comentario;
+use App\Models\Reporte;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 /**
@@ -75,22 +76,22 @@ class ComentarioController extends Controller
      *     @OA\Response(response=400, description="Errores de validación")
      * )
      */
-    public function store(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'id_usuario' => 'required|integer',
-            'foro_id' => 'required|integer',
-            'contenido' => 'required|string',
-            'fecha_publicacion' => 'required|date',
-        ]);
+   public function store(Request $request)
+   {
+    $request->validate([
+        'foro_id' => 'required|integer|exists:foros,id',
+        'contenido' => 'required|string|max:1000',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+    Comentario::create([
+        'id_usuario' => auth()->user()->id, // <-- lo rellenas aquí
+        'foro_id' => $request->foro_id,
+        'contenido' => $request->contenido,
+        'fecha_publicacion' => now(), // <-- lo rellenas aquí
+    ]);
 
-        $comentario = Comentario::create($request->all());
-        return response()->json($comentario, 201);
-    }
+    return back()->with('success', 'Comentario publicado exitosamente.');
+}
 
    /**
      * @OA\Put(
@@ -169,6 +170,18 @@ public function destroy($id)
     $comentario->delete(); // 👈 Aquí ya hace SoftDelete si está habilitado
 
     return response()->json(['message' => 'Comentario eliminado correctamente'], 200);
+}
+
+public function report(Request $request, $comentarioId)
+{
+    Reporte::create([
+        'id_usuario' => auth()->user()->id, // Esto sí es el entero correcto
+        'id_comentario' => $comentarioId,
+        'descripcion' => $request->input('descripcion'),
+        'fecha_reporte' => now(),
+    ]);
+
+    return back()->with('success', '¡Comentario reportado correctamente!');
 }
 
 

@@ -25,7 +25,7 @@
                 <a href="{{ route('admin.progresousuario.index') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-bar-chart-line"></i> Progreso Usuario
                 </a>
-                <a href="{{ route('admin.racha.index') }}" class="list-group-item list-group-item-action">
+                <a href="{{ route('admin.rachas.index') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-fire"></i> Racha
                 </a>
                 <a href="{{ route('admin.ejercicios.index') }}" class="list-group-item list-group-item-action">
@@ -82,10 +82,23 @@
                             </td>
                         </tr>
                     @endforeach
-                </tbody>
-            </table>
+                            </table>
 
-        </div>
-    </div>
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <div>
+                    <small>
+                        Mostrando
+                        {{ $foros->firstItem() ?? 0 }}
+                        -
+                        {{ $foros->lastItem() ?? 0 }}
+                        de
+                        {{ $foros->total() }}
+                        foros
+                    </small>
+                </div>
+                <div>
+                    {{ $foros->links('pagination::bootstrap-5') }}
+                </div>
+            </div>
 </div>
 @endsection

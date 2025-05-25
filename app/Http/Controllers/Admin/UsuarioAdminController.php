@@ -11,7 +11,8 @@ class UsuarioAdminController extends Controller
 {
     public function index()
     {
-        $usuarios = Usuario::with('rol')->get();
+        // Ejemplo en tu controlador
+        $usuarios = Usuario::with('rol')->paginate(10); // o el número que prefieras
         return view('admin.usuarios.index', compact('usuarios'));
     }
 
@@ -50,19 +51,31 @@ class UsuarioAdminController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $usuario = Usuario::findOrFail($id);
+{
+    $usuario = Usuario::findOrFail($id);
 
-        $request->validate([
-            'nombre' => 'required',
-            'correo' => 'required|email|unique:usuario,correo,' . $usuario->id,
-            'rol_id' => 'required|exists:rol,id',
-        ]);
+    // Validación de los datos recibidos
+    $request->validate([
+        'nombre' => 'required|string|max:100',
+        'correo' => 'required|email|unique:usuario,correo,' . $usuario->id,
+        'id_rol' => 'required|exists:roles,id',
+    ]);
 
-        $usuario->update($request->all());
+    // Asignar los nuevos valores
+    $usuario->nombre = $request->nombre;
+    $usuario->correo = $request->correo;
+    $usuario->id_rol = $request->id_rol;
 
-        return redirect()->route('admin.usuarios.index')->with('success', 'Usuario actualizado correctamente');
+    // Solo actualizar contraseña si se escribió una nueva
+    if ($request->filled('contrasena')) {
+        $usuario->contrasena = bcrypt($request->contrasena);
     }
+
+    $usuario->save();
+
+    return redirect()->route('admin.usuarios.index')->with('success', 'Usuario actualizado correctamente');
+}
+
 
     public function destroy($id)
     {

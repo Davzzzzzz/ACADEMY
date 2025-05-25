@@ -160,4 +160,15 @@ class ReporteController extends Controller
         $reporte->delete();
         return response()->json(['message' => 'Reporte eliminado'], 200);
     }
+    public function report(Request $request, $comentarioId){
+    Reporte::create([
+        'id_usuario' => auth()->id(),
+        'id_comentario' => $comentarioId,
+        'descripcion' => $request->input('descripcion'), // Opcional, puedes pedirla en el modal
+        'fecha_reporte' => now(),
+    ]);
+
+    return back()->with('success', '¡Comentario reportado!');
+}
+
 }

@@ -11,7 +11,7 @@ class ForoAdminController extends Controller
     // Mostrar todos los foros
     public function index()
     {
-        $foros = Foro::all();
+        $foros = Foro::paginate(10); // O el número de foros por página que prefieras
         return view('admin.foros.index', compact('foros'));
     }
 

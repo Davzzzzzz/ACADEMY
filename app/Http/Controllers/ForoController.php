@@ -15,11 +15,9 @@ class ForoController extends Controller
     }
 
     // Mostrar todos los foros
-    public function index()
-    {
-        $foros = Foro::latest()->get();
-        return view('foros.index', compact('foros'));
-    }
+    public function index(){
+    $foros = Foro::withCount('comentarios')->get();
+    return view('foros.index', compact('foros'));}
 
     // Mostrar el formulario para crear un nuevo foro
     public function create()
@@ -57,10 +55,10 @@ class ForoController extends Controller
 
     // Mostrar un foro específico
     public function show($id)
-    {
-        $foro = Foro::findOrFail($id);
-        return view('foros.show', compact('foro'));
-    }
+{
+    $foro = Foro::with(['publicaciones.usuario'])->findOrFail($id);
+    return view('foros.show', compact('foro'));
+}
 
     // Mostrar formulario para editar
     public function edit($id)

@@ -14,7 +14,7 @@ class ProgresoUsuarioAdminController extends Controller
     // Listar todos los progresos
     public function index()
     {
-        $progresos = ProgresoUsuario::with(['usuario', 'nivel', 'leccion'])->get();
+        $progresos = ProgresoUsuario::with(['usuario', 'nivel', 'leccion'])->paginate(10);
         return view('admin.progreso_usuarios.index', compact('progresos'));
     }
 
