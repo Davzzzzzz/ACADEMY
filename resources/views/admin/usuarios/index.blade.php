@@ -25,7 +25,7 @@
                 <a href="{{ route('admin.progresousuario.index') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-bar-chart-line"></i> Progreso Usuario
                 </a>
-                <a href="{{ route('admin.racha.index') }}" class="list-group-item list-group-item-action">
+                <a href="{{ route('admin.rachas.index') }}" class="list-group-item list-group-item-action">
                     <i class="bi bi-fire"></i> Racha
                 </a>
                 <a href="{{ route('admin.ejercicios.index') }}" class="list-group-item list-group-item-action">
